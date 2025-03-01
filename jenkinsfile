@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/WISSALF52/app-car.git', branch: 'main'
+                git url: 'https://github.com/WISSALF52/car-application.git', branch: 'main'
             }
         }
         stage('SonarQube Analysis') {
@@ -26,7 +26,7 @@ pipeline {
                       -Dsonar.language=java \
                       -Dsonar.sourceEncoding=UTF-8 \
                       -Dsonar.host.url=http://127.0.0.1:9000 \
-                      -Dsonar.login=$SONAR_TOKEN
+                      -Dsonar.token=$SONAR_TOKEN
                     '''
                 }
             }
