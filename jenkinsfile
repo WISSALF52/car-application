@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    environment {
+        SONAR_TOKEN = 'squ_230e7ecb286db8b9e01f1b256bf40fc2c1ff45e3'
+    }
+
+    tools {
+        sonarQube 'SonarQubeScanner'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/WISSALF52/app-car.git', branch: 'main'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    sh '''
+                    sonar-scanner \
+                      -Dsonar.projectKey=car \
+                      -Dsonar.sources=src/main,src/resources \
+                      -Dsonar.tests=src/test \
+                      -Dsonar.language=java \
+                      -Dsonar.sourceEncoding=UTF-8 \
+                      -Dsonar.host.url=http://127.0.0.1:9000 \
+                      -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
