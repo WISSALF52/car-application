@@ -15,6 +15,18 @@ pipeline {
                 git url: 'https://github.com/WISSALF52/car-application.git', branch: 'main'
             }
         }
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    def directories = ['src/main', 'src/resources', 'src/test']
+                    directories.each { dir ->
+                        if (!fileExists(dir)) {
+                            sh "mkdir -p ${dir}"
+                        }
+                    }
+                }
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
